@@ -28,7 +28,8 @@ class EverMid < ::Middleman::Extension
 
   def preprocess
     rebuild_dir
-    copy
+    move_notes
+    build_tags_page
   end
 
   def rebuild_dir
@@ -39,11 +40,19 @@ class EverMid < ::Middleman::Extension
     end
   end
 
-  def copy
-    notes = EverExp::Notes.new evernotes_path
+  def move_notes
     notes.each do |note|
       note.to_midsrc source_path
     end
+  end
+
+  def build_tags_page
+    group_by_tag = notes.group_by_tag
+    puts ERB.new(template :tag_count).run(binding)
+  end
+
+  def notes
+    @notes ||= EverExp::Notes.new evernotes_path
   end
 
   def evernotes_path
@@ -56,6 +65,11 @@ class EverMid < ::Middleman::Extension
 
   def under_root dir_name
     File.join app.root_path, dir_name
+  end
+
+  def template name
+    tmpl_path = File.join(app.root_path, 'source', 'layouts', name.to_s) + '.erb'
+    File.read tmpl_path
   end
 end
 
