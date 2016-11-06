@@ -16,10 +16,10 @@ module EverExp
 
   class Files
     def to_midsrc src_path
-      img_dir = new_dir src_path
-      Dir.mkdir img_dir
+      new_location = new_dir src_path
+      FileUtils.mkdir new_location
       each do |file|
-        FileUtils.cp file.location, img_dir
+        FileUtils.cp file.location, new_location
       end
     end
 
@@ -28,7 +28,7 @@ module EverExp
     end
 
     def new_dir src_path
-      File.join src_path, 'images', id
+      File.join src_path, EverMid::ImagesDir, id
     end
   end
 
@@ -40,7 +40,7 @@ module EverExp
   class Html
     def to_midsrc src_path
       refresh_imgs
-      File.open(File.join(src_path, new_file_name), 'w') do |file|
+      File.open(new_location(src_path), 'w') do |file|
         file.puts src_content
       end
     end
@@ -55,6 +55,10 @@ module EverExp
       {'title' => title, 'heading' => heading}.to_yaml
     end
 
+    def new_location src_path
+      File.join src_path, EverMid::ArchiveDir, new_file_name
+    end
+
     def new_file_name
       id + '.html.erb'
     end
@@ -66,7 +70,7 @@ module EverExp
     def refresh_imgs
       imgs.each do |img|
         org_src_path = img['src']
-        new_src_path = File.join 'images', id, File.basename(org_src_path)
+        new_src_path = File.join('/' + EverMid::ImagesDir, id, File.basename(org_src_path))
         img['src'] = new_src_path
       end
     end

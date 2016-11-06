@@ -6,6 +6,9 @@ require 'fileutils'
 class EverMid < ::Middleman::Extension
   option :my_option, 'default', 'An example option'
 
+  ArchiveDir = 'archive'
+  ImagesDir = 'images'
+
   def initialize(app, options_hash={}, &block)
     # Call super to build options from the options_hash
     super
@@ -24,15 +27,16 @@ class EverMid < ::Middleman::Extension
   private
 
   def preprocess
-    remove
+    rebuild_dir
     copy
   end
 
-  def remove
-    all_html_erb = Dir[File.join(source_path, '*.html.erb')]
-    FileUtils.rm(all_html_erb)
-    all_images = Dir[File.join(source_path, 'images', '*')]
-    FileUtils.rm_rf(all_images)
+  def rebuild_dir
+    [ArchiveDir, ImagesDir].each do |dir|
+      full_path = File.join source_path, dir
+      FileUtils.rm_rf full_path
+      FileUtils.mkdir full_path
+    end
   end
 
   def copy
