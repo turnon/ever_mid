@@ -48,7 +48,10 @@ class EverMid < ::Middleman::Extension
 
   def build_tags_page
     group_by_tag = notes.group_by_tag
-    puts ERB.new(template :tag_count).run(binding)
+    rendered_tags = ERB.new(template :tags).result(binding)
+    File.open(under_source('_tags.erb'), 'w') do |file|
+      file.puts rendered_tags
+    end
   end
 
   def notes
@@ -65,6 +68,10 @@ class EverMid < ::Middleman::Extension
 
   def under_root dir_name
     File.join app.root_path, dir_name
+  end
+
+  def under_source filename
+    File.join source_path, filename
   end
 
   def template name
