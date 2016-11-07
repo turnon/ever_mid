@@ -10,26 +10,26 @@ class EverMid < ::Middleman::Extension
   ImagesDir = 'images'
 
   def initialize(app, options_hash={}, &block)
-    # Call super to build options from the options_hash
     super
-
-    # Require libraries only when activated
-    # require 'necessary/library'
-
-    # set up your extension
-    # puts options.my_option
   end
 
   def before_build
     preprocess
   end
 
+  def note_entry note
+    "<li><a href='/#{ArchiveDir}/#{note.id}.html'>#{note.title}</a></li>"
+  end
+
+  expose_to_template :note_entry
+
   private
 
   def preprocess
     rebuild_dir
     move_notes
-    build_tags_page
+    build_file_with_template '_tags.erb', :tags
+    build_file_with_template 'index.html.erb', :index
   end
 
   def rebuild_dir
@@ -46,11 +46,10 @@ class EverMid < ::Middleman::Extension
     end
   end
 
-  def build_tags_page
-    group_by_tag = notes.group_by_tag
-    rendered_tags = ERB.new(template :tags).result(binding)
-    File.open(under_source('_tags.erb'), 'w') do |file|
-      file.puts rendered_tags
+  def build_file_with_template output_file, tmpl_file
+    rendered = ERB.new(template tmpl_file).result(binding)
+    File.open(under_source(output_file), 'w') do |file|
+      file.puts rendered
     end
   end
 
