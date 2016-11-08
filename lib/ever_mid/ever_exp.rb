@@ -40,6 +40,7 @@ module EverExp
   class Html
     def to_midsrc src_path
       refresh_imgs
+      replace_code_blocks
       File.open(new_location(src_path), 'w') do |file|
         file.puts src_content
       end
@@ -72,6 +73,18 @@ module EverExp
         org_src_path = img['src']
         new_src_path = File.join('/' + EverMid::ImagesDir, id, File.basename(org_src_path))
         img['src'] = new_src_path
+      end
+    end
+
+    def replace_code_blocks
+      code_blocks.each do |org_block|
+        new_block = [
+          '<div class="ever-code"><pre><code>',
+          org_block.plain_code,
+          '</code></pre></div>'
+        ].join
+        org_block.add_next_sibling new_block
+        org_block.remove
       end
     end
   end
