@@ -14,23 +14,12 @@ class EverMid < ::Middleman::Extension
   end
 
   def before_build
-    preprocess
-  end
-
-  def note_entry note
-    "<li><a href='/#{ArchiveDir}/#{note.id}.html'>#{note.title}</a></li>"
-  end
-
-  expose_to_template :note_entry
-
-  private
-
-  def preprocess
     rebuild_dir
     move_notes
-    build_file_with_template '_tags.erb', :tags
-    build_file_with_template 'index.html.erb', :index
+    aggregate
   end
+
+  private
 
   def rebuild_dir
     [ArchiveDir, ImagesDir].each do |dir|
@@ -44,6 +33,11 @@ class EverMid < ::Middleman::Extension
     notes.each do |note|
       note.to_midsrc source_path
     end
+  end
+
+  def aggregate
+    build_file_with_template '_tags.erb', :tags
+    build_file_with_template 'index.html.erb', :index
   end
 
   def build_file_with_template output_file, tmpl_file

@@ -12,6 +12,10 @@ module EverExp
     def id
       html.id
     end
+
+    def date
+      html.formated_date
+    end
   end
 
   class Files
@@ -50,14 +54,14 @@ module EverExp
       @id ||= Digest::SHA1.hexdigest(title)[0..5]
     end
 
+    def formated_date
+      created.strftime '%d %b %Y'
+    end
+
     private
 
     def page_var
       {'title' => title, 'date' => formated_date, 'heading' => heading}.to_yaml
-    end
-
-    def formated_date
-      created.strftime '%d %b %Y'
     end
 
     def new_location src_path
