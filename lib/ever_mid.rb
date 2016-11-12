@@ -74,7 +74,7 @@ class EverMid < ::Middleman::Extension
   end
 
   def template name
-    tmpl_path = File.join(app.root_path, 'source', 'layouts', name.to_s) + '.erb'
+    tmpl_path = File.join(app.root_path, 'source', 'layouts', 'templates', name.to_s) + '.erb'
     File.read tmpl_path
   end
 end
