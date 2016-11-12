@@ -53,7 +53,11 @@ module EverExp
     private
 
     def page_var
-      {'title' => title, 'heading' => heading}.to_yaml
+      {'title' => title, 'date' => formated_date, 'heading' => heading}.to_yaml
+    end
+
+    def formated_date
+      created.strftime '%d %b %Y'
     end
 
     def new_location src_path
