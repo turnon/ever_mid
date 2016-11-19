@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'yaml'
 require 'digest/sha1'
+require 'toc_list'
 
 module EverExp
   class Note
@@ -45,6 +46,7 @@ module EverExp
     def to_midsrc src_path
       refresh_imgs
       replace_code_blocks
+      set_toc_ref
       File.open(new_location(src_path), 'w') do |file|
         file.puts src_content
       end
@@ -73,7 +75,7 @@ module EverExp
     end
 
     def src_content
-      [page_var, "---\n", content].join
+      [page_var, "---\n", content, table_of_content].join
     end
 
     def refresh_imgs
@@ -93,6 +95,18 @@ module EverExp
         ].join
         org_block.add_next_sibling new_block
         org_block.remove
+      end
+    end
+
+    def table_of_content
+      return unless heading?
+      toc = {'table of content' => heading}
+      TocList.new(toc).render
+    end
+
+    def set_toc_ref
+      heading_elements.each do |e|
+	e['id'] = TocList::HashMethod.call e.text
       end
     end
   end
