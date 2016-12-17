@@ -2,6 +2,7 @@ require 'pathname'
 require "middleman-core"
 require 'ever_mid/ever_exp'
 require 'fileutils'
+require 'toc_list'
 
 class EverMid < ::Middleman::Extension
   option :my_option, 'default', 'An example option'
@@ -17,6 +18,17 @@ class EverMid < ::Middleman::Extension
     rebuild_dir
     move_notes
     aggregate
+  end
+
+  helpers do
+    def table_of_content
+      TocList.new({'table of content' => current_page.data.heading}).render
+    end
+
+    def table_of_content?
+      heading = current_page.data.heading
+      heading and not heading.empty?
+    end
   end
 
   private

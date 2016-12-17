@@ -75,7 +75,7 @@ module EverExp
     end
 
     def src_content
-      [page_var, "---\n", content, table_of_content].join
+      [page_var, "---\n", content].join
     end
 
     def refresh_imgs
@@ -96,12 +96,6 @@ module EverExp
         org_block.add_next_sibling new_block
         org_block.remove
       end
-    end
-
-    def table_of_content
-      return unless heading?
-      toc = {'table of content' => heading}
-      TocList.new(toc).render
     end
 
     def set_toc_ref
