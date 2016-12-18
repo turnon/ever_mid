@@ -2,6 +2,7 @@ require 'fileutils'
 require 'yaml'
 require 'digest/sha1'
 require 'toc_list'
+require 'ever_exp'
 
 module EverExp
   class Note
