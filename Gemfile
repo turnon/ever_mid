@@ -17,5 +17,5 @@ group :test do
   gem 'rspec'
 end
 
-gem 'ever_exp', path: '/home/ken/ever_exp'
+gem 'ever_exp', '= 0.1.0'
 gem 'toc_list', '= 0.1.1'
