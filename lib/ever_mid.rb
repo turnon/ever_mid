@@ -64,7 +64,7 @@ class EverMid < ::Middleman::Extension
   end
 
   def evernotes_path
-    under_root 'evernotes'
+    under_root(app.config[:evernotes_path] || 'evernotes')
   end
 
   def source_path
