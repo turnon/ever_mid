@@ -6,6 +6,15 @@ require 'ever_exp'
 require 'cgi'
 
 module EverExp
+
+  module FilenameConvertor
+    def self.convert path
+      ext = File.extname path
+      name = File.basename path, ext
+      Digest::SHA1.hexdigest(name)[0..5] + ext
+    end
+  end
+
   class Note
     def to_midsrc src_path
       files.to_midsrc src_path
@@ -26,7 +35,7 @@ module EverExp
       new_location = new_dir src_path
       FileUtils.mkdir new_location
       each do |file|
-        FileUtils.cp file.location, new_location
+        FileUtils.cp file.location, File.join(new_location, FilenameConvertor.convert(file.location))
       end
     end
 
@@ -83,7 +92,7 @@ module EverExp
     def refresh_imgs
       imgs.each do |img|
         org_src_path = img['src']
-        new_src_path = File.join('/' + EverMid::ImagesDir, id, File.basename(org_src_path))
+        new_src_path = File.join('/' + EverMid::ImagesDir, id, FilenameConvertor.convert(org_src_path))
         img['src'] = new_src_path
       end
     end
