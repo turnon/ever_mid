@@ -56,6 +56,7 @@ module EverExp
   class Html
     def to_midsrc src_path
       refresh_imgs
+      refresh_attachments
       replace_code_blocks
       set_toc_ref
       File.open(new_location(src_path), 'w') do |file|
@@ -94,6 +95,14 @@ module EverExp
         org_src_path = img['src']
         new_src_path = File.join('/' + EverMid::ImagesDir, id, FilenameConvertor.convert(org_src_path))
         img['src'] = new_src_path
+      end
+    end
+
+    def refresh_attachments
+      attachments.each do |a|
+        org_src_path = a['href']
+        new_src_path = File.join('/' + EverMid::ImagesDir, id, FilenameConvertor.convert(org_src_path))
+        a['href'] = new_src_path
       end
     end
 
