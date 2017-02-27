@@ -3,6 +3,7 @@ require 'yaml'
 require 'digest/sha1'
 require 'toc_list'
 require 'ever_exp'
+require 'cgi'
 
 module EverExp
   class Note
@@ -91,7 +92,7 @@ module EverExp
       code_blocks.each do |org_block|
         new_block = [
           '<div class="ever-code"><pre><code>',
-          org_block.plain_code,
+          CGI::escapeHTML(org_block.plain_code),
           '</code></pre></div>'
         ].join
         org_block.add_next_sibling new_block
