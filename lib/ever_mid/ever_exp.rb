@@ -75,7 +75,7 @@ module EverExp
     private
 
     def page_var
-      {'title' => title, 'date' => formated_date, 'heading' => heading}.to_yaml
+      {'title' => title, 'date' => formated_date, 'tags' => tags_array, 'heading' => heading}.to_yaml
     end
 
     def new_location src_path

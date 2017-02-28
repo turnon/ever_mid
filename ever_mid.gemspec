@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("middleman-core", [">= 4.1.10"])
   
   # Additional dependencies
-  s.add_runtime_dependency("ever_exp", "0.1.0")
-  s.add_runtime_dependency("toc_list", "0.1.1")
+  s.add_runtime_dependency "ever_exp", "~> 0.1.2"
+  s.add_runtime_dependency "toc_list", "0.1.1"
 end
