@@ -69,7 +69,7 @@ module EverExp
     end
 
     def formated_date
-      created.strftime '%d %b %Y'
+      created.strftime '%Y-%m-%d'
     end
 
     private
