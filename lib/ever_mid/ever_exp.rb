@@ -58,6 +58,7 @@ module EverExp
       refresh_imgs
       refresh_attachments
       replace_code_blocks
+      make_target_blank
       set_toc_ref
       File.open(new_location(src_path), 'w') do |file|
         file.puts src_content
@@ -103,6 +104,23 @@ module EverExp
         org_src_path = a['href']
         new_src_path = File.join('/' + EverMid::ImagesDir, id, FilenameConvertor.convert(org_src_path))
         a['href'] = new_src_path
+      end
+    end
+
+    def make_target_blank
+      imgs.each do |img|
+	if img.parent.name == 'a'
+	  img.parent['target'] = '_blank'
+	  next
+	end
+	src = img['src']
+	new_img = [
+	  "<a href='#{src}' target='_blank'>",
+	  img.to_s,
+	  "</a>"
+	].join
+	img.add_next_sibling new_img
+	img.remove
       end
     end
 
