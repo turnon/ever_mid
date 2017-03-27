@@ -17,5 +17,5 @@ group :test do
   gem 'rspec'
 end
 
-gem 'ever_exp', '0.1.1'
+gem 'ever_exp', '0.1.3'
 gem 'toc_list', '0.1.1'
